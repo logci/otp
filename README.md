@@ -1,33 +1,61 @@
+# WhatsApp OTP Verification API
 
+A minimal Heroku-ready API that connects one WhatsApp session and sends OTP codes to the requested number.
 
+## Endpoint
 
-<div align="center">
+```text
+GET https://your-heroku-app.herokuapp.com/num=COUNTRY_CODE_NUMBER
+```
 
-<img src="https://raw.githubusercontent.com/nonxe/a1/main/aashif-banner.svg" width="800" alt="AASHIF-MD BY AASHIF SER"/>
+Example:
 
-</div>
+```text
+https://your-heroku-app.herokuapp.com/num=919876543210
+```
 
----
+When the endpoint is called:
 
-<div align="center">
+1. A 6-digit OTP is generated.
+2. The OTP is sent on WhatsApp to the requested number.
+3. The API response returns the same OTP and an HTML page with a **Copy OTP** button.
+4. The OTP expires after 5 minutes.
 
-### 🌟 Welcome to **AASHIF-MD** 🌟
+WhatsApp message format:
 
-*A powerful WhatsApp Bot made with ❤️ by **Aashif Ser***
+```text
+🌸 *Your OTP is: 123456*
 
-</div>
+⏳ Expires in 5 minutes.
+⚠️ Never share this code with anyone.
+```
 
---- 
+## Optional verify endpoint
 
+```text
+GET https://your-heroku-app.herokuapp.com/verify?num=COUNTRY_CODE_NUMBER&otp=123456
+```
 
+This verifies the latest unexpired OTP saved in memory for that number.
 
-## For HEROKU DEPLOYMENT
+## Environment variables
 
-<a href="https://signup.heroku.com/login"><img src="https://img.shields.io/badge/HEROKU%20SIGNUP-white" alt="Heroku Signup" width="150"></a>
-  
-<a href="https://dashboard.heroku.com/new?template=https://github.com/nonxe/a1"><img src="https://img.shields.io/badge/DEPLOY%20NOW-red" alt="Deploy on Heroku" width="150"></a>
+| Variable | Required | Description |
+| --- | --- | --- |
+| `SESSION_ID` | Yes | Gifted WhatsApp session string, for example `Gifted~...` |
+| `PORT` | No | Automatically provided by Heroku |
 
-## For Localhost or Panel
-<a href="https://github.com/nonxe/a1/archive/refs/heads/main.zip">
-  <img src="https://img.shields.io/badge/⬇️ Download ZIP-Click Here-brightgreen?style=for-the-badge" alt="Download ZIP"/>
-</a>
+## Run locally
+
+```bash
+npm install
+npm start
+```
+
+## Health check
+
+```text
+GET /health
+```
+
+Returns whether the server is alive and whether the WhatsApp session is connected.
